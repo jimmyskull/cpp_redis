@@ -20,7 +20,7 @@ project(${PROJECT} CXX)
 ###
 # compilation options
 ###
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -W -Wall -Wextra")
+#set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -W -Wall -Wextra")
 
 
 ###
@@ -50,20 +50,18 @@ link_directories(${GTEST_LIBS})
 set(DIRS "sources" "sources/network" "sources/builders" "sources/replies")
 foreach(dir ${DIRS})
   # get directory sources
-  file(GLOB s_${dir} "${dir}/*.cpp")
+  file(GLOB s_${dir} "${CMAKE_CURRENT_SOURCE_DIR}/${dir}/*.cpp")
   # set sources
   set(SOURCES ${SOURCES} ${s_${dir}})
 endforeach()
 
+find_package(Boost REQUIRED COMPONENTS system)
 
 ###
 # executable
 ###
-add_library(${PROJECT} SHARED ${SOURCES})
-target_link_libraries(${PROJECT} boost_system)
-set_target_properties(${PROJECT}
-                      PROPERTIES
-                      LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/target")
+add_library(${PROJECT} STATIC ${SOURCES})
+target_link_libraries(${PROJECT} ${Boost_LIBRARIES})
 
 
 ###
